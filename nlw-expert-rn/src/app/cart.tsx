@@ -6,11 +6,17 @@ import { Product } from "@/components/product";
 import { ProductCartProps, useCartStore } from "@/stores/cart-store";
 import { formatCurrency } from "@/utils/functions/format-currency";
 import { Feather } from "@expo/vector-icons";
-import { Text, View, ScrollView, Alert } from "react-native";
+import { useNavigation } from "expo-router";
+import { useState } from "react";
+import { Alert, ScrollView, Text, View, Linking } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
+const PHONE_NUMBER = "5516...";
 
 export default function Cart() {
   const cartStore = useCartStore();
+  const navigation = useNavigation();
+  const [address, setAddress] = useState("");
 
   const total = formatCurrency(
     cartStore.products.reduce(
@@ -33,6 +39,30 @@ export default function Cart() {
         },
       ]
     );
+  }
+
+  function handleOrder() {
+    if (address.trim().length === 0) {
+      return Alert.alert("Pedido", "Informe os dados da entrega.");
+    }
+
+    const products = cartStore.products
+      .map((product) => ` ${product.quantity} ${product.title}`)
+      .join("\n");
+
+    const message = [
+      `   *NOVO PEDIDO* `,
+      `Entregar para: ${address}\n`,
+      `${products} `,
+      `\nValor total: ${total}`,
+    ].join("\n");
+
+    Linking.openURL(
+      `http://api.whatsapp.com/send?phone=${PHONE_NUMBER}&text=${message}`
+    );
+
+    cartStore.clear();
+    navigation.goBack();
   }
 
   return (
@@ -64,9 +94,9 @@ export default function Cart() {
 
             <Input
               placeholder="Informe o endereço de entrega com rua, bairro, CEP, número e complemento..."
-              onChangeText={() => {}}
+              onChangeText={setAddress}
               blurOnSubmit={true}
-              onSubmitEditing={() => {}}
+              onSubmitEditing={handleOrder}
               returnKeyType="next"
             />
           </View>
@@ -74,7 +104,10 @@ export default function Cart() {
       </KeyboardAwareScrollView>
 
       <View className="p-5 pb-8 gap-5">
-        <Button disabled={cartStore.products.length === 0} onPress={() => {}}>
+        <Button
+          disabled={cartStore.products.length === 0}
+          onPress={handleOrder}
+        >
           <Button.Text>Enviar Pedido</Button.Text>
           <Button.Icon>
             <Feather name="arrow-right-circle" size={20} />
