@@ -1,6 +1,6 @@
 import { Image, Text, View } from "react-native";
-import { useLocalSearchParams, useNavigation } from "expo-router";
-import { PRODUCTS } from "@/utils/data/products";
+import { useLocalSearchParams, useNavigation, Redirect } from "expo-router";
+import { PRODUCTS, ProductProps } from "@/utils/data/products";
 import { formatCurrency } from "@/utils/functions/format-currency";
 import { Button } from "@/components/button";
 import { Feather } from "@expo/vector-icons";
@@ -12,12 +12,14 @@ export default function Product() {
   const navigation = useNavigation();
   const cartStore = useCartStore();
 
-  const product = PRODUCTS.find((item) => item.id === id)!;
+  const product = PRODUCTS.find((item) => item.id === id);
 
-  console.log(cartStore.products);
+  if (!product) {
+    return <Redirect href="/" />;
+  }
 
-  function handleAddToCart() {
-    cartStore.add(product);
+  function handleAddToCart(productData: ProductProps) {
+    cartStore.add(productData);
     navigation.goBack();
   }
 
@@ -50,14 +52,14 @@ export default function Product() {
       </View>
 
       <View className="p-5 pb-8 gap-5">
-        <Button onPress={handleAddToCart}>
+        <Button onPress={() => handleAddToCart(product)}>
           <Button.Icon>
             <Feather name="plus-circle" size={20} />
           </Button.Icon>
           <Button.Text>Adicionar ao pedido</Button.Text>
         </Button>
 
-        <LinkButton title="Voltar ao cardápio" href="/"></LinkButton>
+        <LinkButton title="Voltar ao cardápio" href="/" />
       </View>
     </View>
   );
