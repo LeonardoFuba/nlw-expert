@@ -1,0 +1,31 @@
+{
+  "cli": {
+    "version": ">= 7.1.2"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "ios": {
+        "resourceClass": "m-medium"
+      }
+    },
+    "preview": {
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "production": {
+      "autoIncrement": true,
+      "ios": {
+        "resourceClass": "m-medium"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

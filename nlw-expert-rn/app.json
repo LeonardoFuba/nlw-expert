@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "NLW Expert",
-    "slug": "nlw-expert-rn",
+    "name": "Orders",
+    "slug": "nlw-expert-orders",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "orders",
     "userInterfaceStyle": "dark",
     "splash": {
       "image": "./assets/images/splash.png",
@@ -37,6 +37,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "887623e7-378c-46b4-93b4-2b855a2277cd"
+      }
     }
   }
 }
