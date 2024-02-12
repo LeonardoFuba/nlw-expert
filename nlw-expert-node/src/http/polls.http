@@ -1,0 +1,25 @@
+# @name create-poll
+POST http://localhost:3333/polls
+content-type: application/json
+
+{
+  "title": "Qual melhor framework Node.js",
+  "options": [
+    "Express", "Fastify", "NestJS", "AdonisSJ", "HapiJS"
+  ]
+}
+
+###
+
+# @name get-poll
+GET http://localhost:3333/polls/b67dcde8-db25-463c-9fef-5908395b6313
+
+###
+
+# @name vote-on-poll
+POST http://localhost:3333/polls/b67dcde8-db25-463c-9fef-5908395b6313/votes
+content-type: application/json
+
+{
+  "pollOptionId": "f1b4b82d-2b64-44b4-b648-d6429cac34ee"
+}
